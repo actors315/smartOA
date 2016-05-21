@@ -45,3 +45,16 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+.settings/
+.project
+.svn/
+ace-chinese/
+Public/Static/js/t.js
+Public/Static/js/m.js
+ace/
+Codeigniter/
+requirejs/
+thinkphp/
+require-css/
+App/Common/Conf/db.php
+App/Common/Conf/weixin.php
