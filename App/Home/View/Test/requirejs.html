@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title>Just do it</title>
+	</head>
+	<body>
+		<p>
+			This is test page.
+		</p>
+
+		<script src="__REQUIREJS__/require.js" data-main="__STATIC__/js/main"></script>
+		<script type="text/javascript">
+			require(['config'],function(){
+				require(['a'], function(a) {
+					a.hello();
+				});
+				
+				require(['smartOA'], function(smart) {
+					for (var i in smart.device) {
+						document.writeln(i + ':' + smart.device[i] + "<br />");
+					}
+					console.log(smart);
+				});
+			});
+
+		</script>
+	</body>
+</html>
