@@ -17,7 +17,7 @@ class PublicController extends Controller {
 		$is_verify_code = get_system_config("IS_VERIFY_CODE");
 		if (!empty($is_verify_code)) {
 			$verify = new \Think\Verify();
-			if (!$verify -> check($_REQUEST['verify'],'login')) {
+			if (!$verify -> check($_REQUEST['verify'], 'login')) {
 				$this -> error('验证码错误！');
 			}
 		}
@@ -57,14 +57,27 @@ class PublicController extends Controller {
 		$data['login_count'] = array('exp', 'login_count+1');
 		$data['last_login_ip'] = $ip;
 		M('User') -> save($data);
-		header('Location: ' . U("index/index"));//登录成功直接跳转
+		header('Location: ' . U("index/index"));
+		//登录成功直接跳转
 	}
 
-	public function register(){
+	public function logout() {
+		$auth_id = session(C('USER_AUTH_KEY'));
+		if (isset($auth_id)) {
+			session(null);
+			$this -> assign("jumpUrl", __APP__);
+			$this -> success('退出成功！');
+		} else {
+			$this -> assign("jumpUrl", __APP__);
+			$this -> error('退出成功！');
+		}
+	}
+
+	public function register() {
 		$is_verify_code = get_system_config("IS_VERIFY_CODE");
 		if (!empty($is_verify_code)) {
 			$verify = new \Think\Verify();
-			if (!$verify -> check($_REQUEST['verify'],'register')) {
+			if (!$verify -> check($_REQUEST['verify'], 'register')) {
 				$this -> error('验证码错误！');
 			}
 		}
