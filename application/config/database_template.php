@@ -75,12 +75,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'rds2n0dqneoagzjduq7zs.mysql.rds.aliyuncs.com',
-	'username' => 'db_smartoa',
-	'password' => 'db_smartoa',
-	'database' => 'db_smartoa',
+	'hostname' => 'localhost',
+	'username' => '',
+	'password' => '',
+	'database' => '',
 	'dbdriver' => 'mysqli',
-	'dbprefix' => 'oa_',
+	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
@@ -95,6 +95,6 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-$db['LINGYIN'] = array(
-	
+$db['TEST'] = array(
+
 ) + $db['default'];

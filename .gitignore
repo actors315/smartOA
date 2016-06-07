@@ -58,3 +58,5 @@ thinkphp/
 require-css/
 App/Common/Conf/db.php
 App/Common/Conf/weixin.php
+application/config/weixin.php
+application/config/database.php
