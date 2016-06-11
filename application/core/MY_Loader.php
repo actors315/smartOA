@@ -75,7 +75,7 @@ class MY_Loader extends CI_Loader
 		$CI =& get_instance();
 		if (isset($CI->$name))
 		{
-			show_error('The service name you are loading is the name of a resource that is already being used: '.$name);
+			throw new Exception('The service name you are loading is the name of a resource that is already being used: '.$name);
 		}
 		
 		$service = ucfirst(strtolower($service));
@@ -101,7 +101,7 @@ class MY_Loader extends CI_Loader
 		}
 
 		// couldn't find the service
-		show_error('Unable to locate the service you have specified: '.$service);
+		throw new Exception('The service is not exist: '.$service);
 	}
 	
 }

@@ -48,18 +48,18 @@ define(['smartOA', 'ui_dialog'], function(smart, ui) {
 			type : "POST",
 			url : url,
 			data : vars + "&ajax=1",
-			dataType : "json",
+			dataType : "jsonp",
 			success : callback
 		});
 	}
 
 	/*提交表单*/
 	function send_form(formId, post_url, return_url) {
-		if ($("#ajax").val() == 1) {
+		if ($("#"+formId+" #ajax").val() == 1) {
 			var vars = $("#" + formId).serialize();
-			sendAjax(post_url, vars, function(data) {
+			send_ajax(post_url, vars, function(data) {
 				if (data.status) {
-					ui_alert(data.info, function() {
+					ui.alert(data.info, function() {
 						if (return_url) {
 							location.href = return_url;
 						}

@@ -97,7 +97,9 @@
 															<input type="checkbox" name="remember" name="remember" onclick="this.value=(this.value==0)?1:0" value="0" class="ace" />
 															<span class="lbl"> 记住我</span>
 														</label>
-
+														<input type="hidden" name="ajax" id="ajax" value="1" />
+														<input type="hidden" name="service_name" id="service_name" value="user" />
+														<input type="hidden" name="operate_name" id="operate_name" value="check_login" />
 														<button type="button" onclick="login()" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">登录</span>
@@ -371,7 +373,9 @@
 			function login(){
 				require(['common'],function(c){
 					if(c.check_form('form_login')){
-						c.send_form('form_login',"{:U('public/check_login')}");
+						c.send_ajax("https://api.lingyin99.cn/gateway/route.jsonp",$('#form_login').serialize(),function(){
+							location.href = "{:U('Index/index')}";
+						});
 					}
 				});
 			}

@@ -16,3 +16,5 @@ $config['wechat_appsecret'] = '';
 $config['encoding_aes_key'] = '';
 
 $config['accesstoken_file'] = '';
+
+
