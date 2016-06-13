@@ -49,7 +49,7 @@ class AuthCheckBehavior extends Behavior {
 		$user = cookie('SMART_LOGIN_INFO');
 		if (empty($user)) {
 			$curl = new \Home\Org\Util\ThinkCurl();
-			$curl -> set_postfields(array('token' => $token, 'service_name' => 'user', 'operate_name' => 'check_token'));
+			$curl -> set_postfields(array('token' => $token, 'service_name' => 'auth', 'operate_name' => 'check_token'));
 			$user_json = $curl -> post(C('AUTH_API_URL')) -> execute();
 			$user = json_decode($user_json, TRUE);
 			if ($user['status'] != 1) {//接口失败
