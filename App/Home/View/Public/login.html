@@ -371,9 +371,12 @@
 			});
 		
 			function login(){
-				require(['common'],function(c){
+				require(['common','smartOA'],function(c,smart){
 					if(c.check_form('form_login')){
-						c.send_ajax("https://api.lingyin99.cn/gateway/route.jsonp",$('#form_login').serialize(),function(){
+						c.send_ajax("https://api.lingyin99.cn/gateway/route.jsonp",$('#form_login').serialize(),function(res){
+							console.log(res);
+							smart.cookie.set('token',res.data.token,7*24*3600,'.lingyin99.cn','/');//token有效期7天
+							smart.cookie.set('SMART_LOGIN_INFO',smart.object.serialize(res.data),3600,'.lingyin99.cn','/');//有效期一小时
 							location.href = "{:U('Index/index')}";
 						});
 					}

@@ -31,17 +31,48 @@ class User extends MY_Service {
 		
 		$this->User_model->update_user(array('id'=>$auth_info['id']),$info);
 		
-		$this->User_model->update_token($auth_info);
+		$auth_info['token'] = $this->User_model->update_token($auth_info);
 		
-		unset($auth_info['id']);
-		unset($auth_info['password']);
-		unset($auth_info['salt']);
-		return $auth_info;
+		return $this->_return($auth_info);
 	}
 	
 	public function check_token(){
+		if (empty($this->data['token'])) {
+			throw new Exception('token不能为空！');			
+		}
 		
+		$token_info = $this->User_model->get_token(array('access_token'=>$this->data['token']));
+		if(!isset($token_info['userid'])){
+			throw new Exception("token不存在或已过期！");			
+		}
+		
+		$auth_info = $this->User_model->get_user(array(
+			'id' => $token_info['userid'],
+			'is_del' => 0
+		));
+		
+		if (false == $auth_info) {
+			throw new Exception('账号已被禁用！');
+		}
+		
+		$auth_info['token'] = $token_info['access_token'];
+		
+		$info['last_login_ip'] = $this->input->ip_address();
+		$info['last_login_time'] = time();
+		$info['login_count'] = array('expr', 'login_count+1');
+		
+		$this->User_model->update_user(array('id'=>$auth_info['id']),$info);
+		
+		$this->User_model->update_token($auth_info);		
+		
+		return $this->_return($auth_info);
 	}
 	
+	private function _return($user){
+		unset($user['id']);
+		unset($user['password']);
+		unset($user['salt']);
+		return $user;
+	}
 }
 	

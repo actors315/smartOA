@@ -53,10 +53,9 @@ class User_model extends Base_model {
 			$result = $this -> cache -> get($where['access_token']);
 		}
 
-		if (!$result) {
-			$qurey = $this -> db -> where($where) -> get($table);
+		if (!isset($result['access_token'])) {
+			$qurey = $this -> db -> where($where) -> where(array('invalidate >' => time())) -> get($table);
 			$result = $qurey -> result_array();
-
 			return isset($result[0]) ? $result[0] : FALSE;
 		}
 
@@ -68,30 +67,31 @@ class User_model extends Base_model {
 	 */
 	public function update_token($user) {
 		//更新CI session
-		$sessiondata['access_token'] = $this->_GUID();
-		$sessiondata['invalidate'] = time() + 7*24*60*60;
+		$sessiondata['access_token'] = isset($user['token']) ? $user['token'] : $this -> _GUID();
+		$sessiondata['invalidate'] = isset($user['token']) ? time() + 60 * 60 : time() + 7 * 24 * 60 * 60;
 		$sessiondata['userid'] = $user['id'];
-		$sessiondata['lastguid'] = $this->_GUID();
-		$sessiondata['lastdate'] = time();
+		$sessiondata['lastguid'] = $this -> _GUID();
+		$sessiondata['lastdate'] = date('Y-m-d H:i:s');
 		$sessiondata['last_activity'] = time();
-		$sessiondata['ip_address'] = $this->input->ip_address();
-		$sessiondata['user_agent'] = $this->input->user_agent();
-		$this->session->set_userdata($sessiondata);
+		$sessiondata['ip_address'] = $this -> input -> ip_address();
+		$sessiondata['user_agent'] = $this -> input -> user_agent();
+		$this -> session -> set_userdata($sessiondata);
+
+		//更新到缓存
+		$this -> cache -> save($this -> session -> userdata('access_token'), $this -> session -> userdata, $this -> session -> userdata('invalidate'));
 		
 		//更新access_token到表
 		$data['userid'] = $user['id'];
-		$data['access_token'] = $this->session->userdata('access_token');
-		$data['ip'] = $this->session->userdata('ip_address');
-		$data['user_agent'] = $this->session->userdata('user_agent');
-		$data['last_activity'] = $this->session->userdata('last_activity');
-		$data['lastdate'] = $this->session->userdata('lastdate');
-		$data['lastguid'] = $this->session->userdata('lastguid');
-		$data['invalidate'] = 	$this->session->userdata('invalidate');
-		
-		//更新到缓存
-		$this->cache->save($sessiondata['access_token'], $this->session->userdata, $this->session->userdata('invalidate'));
-		
-		return $this->db->set($data)->where(array('userid'=>$user['id']))->replace('user_access_token');
+		$data['access_token'] = $this -> session -> userdata('access_token');
+		$data['ip'] = $this -> session -> userdata('ip_address');
+		$data['user_agent'] = $this -> session -> userdata('user_agent');
+		$data['last_activity'] = $this -> session -> userdata('last_activity');
+		$data['lastdate'] = $this -> session -> userdata('lastdate');
+		$data['lastguid'] = $this -> session -> userdata('lastguid');
+		$data['invalidate'] = $this -> session -> userdata('invalidate');
+		$this -> db -> set($data) -> where(array('userid' => $user['id'])) -> replace('user_access_token');
+
+		return $sessiondata['access_token'];
 	}
 
 	private function _GUID() {

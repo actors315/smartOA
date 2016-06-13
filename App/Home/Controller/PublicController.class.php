@@ -4,7 +4,8 @@ namespace Home\Controller;
 use Think\Controller;
 
 class PublicController extends Controller {
-
+	protected $config = array('app_type' => 'public');
+	
 	public function login() {
 
 		$this -> assign('is_verify_code', get_system_config("IS_VERIFY_CODE"));
