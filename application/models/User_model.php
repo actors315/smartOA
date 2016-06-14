@@ -50,15 +50,15 @@ class User_model extends Base_model {
 	 */
 	public function get_token($where, $table = 'user_access_token') {
 		if (@$this -> config -> item('enable_cache')) {
-			$result = $this -> cache -> get($where['access_token']);
+			if(isset($where['access_token'])){
+				$result = $this -> cache -> get($where['access_token']);
+			}			
 		}
-
 		if (!isset($result['access_token'])) {
 			$qurey = $this -> db -> where($where) -> where(array('invalidate >' => time())) -> get($table);
 			$result = $qurey -> result_array();
 			return isset($result[0]) ? $result[0] : FALSE;
 		}
-
 		return $result;
 	}
 
@@ -68,7 +68,7 @@ class User_model extends Base_model {
 	public function update_token($user) {
 		//更新CI session
 		$sessiondata['access_token'] = isset($user['token']) ? $user['token'] : $this -> _GUID();
-		$sessiondata['invalidate'] = isset($user['token']) ? time() + 60 * 60 : time() + 7 * 24 * 60 * 60;
+		$sessiondata['invalidate'] = 3 * 24 * 60 * 60;
 		$sessiondata['userid'] = $user['id'];
 		$sessiondata['lastguid'] = $this -> _GUID();
 		$sessiondata['lastdate'] = date('Y-m-d H:i:s');

@@ -41,31 +41,33 @@ class AuthCheckBehavior extends Behavior {
 			return TRUE;
 		}
 
-		$token = cookie(C('USER_AUTH_KEY'));
-		if (empty($token)) {
-			redirect(U(C('USER_AUTH_GATEWAY')));
-		}
-
-		$user = cookie('SMART_LOGIN_INFO');
-		if (empty($user)) {
-			$curl = new \Home\Org\Util\ThinkCurl();
-			$curl -> set_postfields(array('token' => $token, 'service_name' => 'auth', 'operate_name' => 'check_token'));
-			$user_json = $curl -> post(C('AUTH_API_URL')) -> execute();
-			$user = json_decode($user_json, TRUE);
-			if ($user['status'] != 1) {//接口失败
+		//登录处理
+		if (empty(session('emp_no'))) {
+			$token = cookie(C('USER_AUTH_KEY'));
+			if (empty($token)) {
 				redirect(U(C('USER_AUTH_GATEWAY')));
 			}
-			cookie('SMART_LOGIN_INFO', http_build_query($user['data'], '', '&'), array('path' => '/', 'domain' => '.lingyin99.cn', 'expire' => 3600));
-			$auth_info = $user['data'];
-		} else {
-			parse_str(urldecode($user),$auth_info);
-		}
-		if (empty(session('emp_no')) || session('emp_no') <> $auth_info['emp_no']) {
+			$user = cookie('SMART_LOGIN_INFO');
+			if (empty($user)) {
+				$curl = new \Home\Org\Util\ThinkCurl();
+				$curl -> set_postfields(array('token' => $token, 'service_name' => 'auth', 'operate_name' => 'check_token'));
+				$user_json = $curl -> post(C('AUTH_API_URL')) -> execute();
+				\Think\Log::record('调用接口自动登录，接口返回user_json=' . $user_json, 'INFO');
+				$user = json_decode($user_json, TRUE);
+				if ($user['status'] != 1) {//接口失败
+					redirect(U(C('USER_AUTH_GATEWAY')));
+				}
+				cookie('SMART_LOGIN_INFO', http_build_query($user['data'], '', '&'), array('path' => '/', 'domain' => '.lingyin99.cn', 'expire' => 3600));
+				$auth_info = $user['data'];
+			} else {
+				parse_str(urldecode($user), $auth_info);
+			}
 			session('emp_no', $auth_info['emp_no']);
 			session('user_name', $auth_info['name']);
 			session('user_pic', $auth_info['pic']);
 		}
-		return true;
+
+		return FALSE;
 	}
 
 }

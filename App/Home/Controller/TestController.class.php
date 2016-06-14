@@ -4,6 +4,8 @@ namespace Home\Controller;
 use Think\Controller;
 
 class TestController extends Controller {
+	protected $config = array('app_type' => 'public');
+	
     public function test() {
         print_r(C('DOWNLOAD_UPLOAD'));
         echo "<br />";
@@ -26,4 +28,10 @@ class TestController extends Controller {
     public function bundle(){
         
     }
+	
+	public function testyar(){
+		$client = new \Yar_client('https://admin.lingyin99.cn/Home/TestYar');
+        $result = $client->index();
+        var_dump($result); // 结果：Hello, Yar!
+	}
 }

@@ -31,6 +31,11 @@ class Auth extends MY_Service {
 		
 		$this->User_model->update_user(array('id'=>$auth_info['id']),$info);
 		
+		$token_info = $this->User_model->get_token(array('userid'=>$auth_info['id']));
+		if(isset($token_info['access_token'])){//如果token存在，不生成新的
+			$auth_info['token'] = $token_info['access_token'];
+		}
+		
 		$auth_info['token'] = $this->User_model->update_token($auth_info);
 		
 		return $this->_return($auth_info);
@@ -63,7 +68,7 @@ class Auth extends MY_Service {
 		
 		$this->User_model->update_user(array('id'=>$auth_info['id']),$info);
 		
-		$this->User_model->update_token($auth_info);		
+		$this->User_model->update_token($auth_info);
 		
 		return $this->_return($auth_info);
 	}

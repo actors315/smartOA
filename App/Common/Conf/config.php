@@ -22,7 +22,8 @@ $config = array(
 		'SHOW_PAGE_TRACE' =>FALSE,
 	),
 	'LINGYIN' => array(
-		'TEST'	=> 'test config'
+		'SESSION_OPTIONS'	=> array('name'=>'smart_session','expire'=>7200,'domain'=>'.lingyin99.cn','path'=>'/'),
+		'COOKIE_DOMAIN'		=> '.lingyin99.cn',
 	),
 );
 return isset($config[COMPANY_NO]) ? $config[COMPANY_NO] + $config['default']: $config['default'];
