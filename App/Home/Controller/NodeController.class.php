@@ -3,13 +3,13 @@ namespace Home\Controller;
 
 use Think\Controller;
 
-class SystemController extends CommonController
+class NodeController extends CommonController
 {
 	
-    public function node()
+    public function index()
     {
     	$this->assign('title','菜单管理');
-        $this->display();
+        $this->_index();
     }
 	
 	

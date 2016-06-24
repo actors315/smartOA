@@ -75,6 +75,27 @@ function think_decrypt($data, $key = '') {
 	return base64_decode($str);
 }
 
+function get_return_url($level = null) {
+	if (empty($level)) {
+		$return_url = cookie('return_url');
+	} else {
+		$return_url = cookie('return_url_' . $level);
+	}
+	return $return_url;
+}
+
+
+function filter_search_field($v1) {
+	if ($v1 == "keyword")
+		return true;
+	$prefix = substr($v1, 0, 3);
+	$arr_key = array("be_", "en_", "eq_", "li_", "lt_", "gt_", "bt_");
+	if (in_array($prefix, $arr_key)) {
+		return true;
+	} else {
+		return false;
+	}
+}
 //以下函数需连接数据库
 
 /**
@@ -101,4 +122,24 @@ function get_system_config($code) {
 			return $result;
 		}
 	}
+}
+
+function get_model_fields($model) {
+	$arr_field = array();
+	if (isset($model -> viewFields)) {
+		foreach ($model->viewFields as $key => $val) {
+			unset($val['_on']);
+			unset($val['_type']);
+			if (!empty($val[0]) && ($val[0] == "*")) {
+				$model = M($key);
+				$fields = $model -> getDbFields();
+				$arr_field = array_merge($arr_field, array_values($fields));
+			} else {
+				$arr_field = array_merge($arr_field, array_values($val));
+			}
+		}
+	} else {
+		$arr_field = $model -> getDbFields();
+	}
+	return $arr_field;
 }

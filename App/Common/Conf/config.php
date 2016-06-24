@@ -22,7 +22,7 @@ $config = array(
 		'SHOW_PAGE_TRACE' =>FALSE,
 	),
 	'LINGYIN' => array(
-		'SESSION_OPTIONS'	=> array('name'=>'smart_session','expire'=>7200,'domain'=>'.lingyin99.cn','path'=>'/'),
+		'SESSION_OPTIONS'	=> array('name'=>'smart_session','expire'=>7200,'domain'=>'.lingyin99.cn'),
 		'COOKIE_DOMAIN'		=> '.lingyin99.cn',
 	),
 );

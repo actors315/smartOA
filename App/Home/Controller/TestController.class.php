@@ -16,11 +16,11 @@ class TestController extends Controller {
         echo "COMPANYID is " . COMPANYID;
     }
 	
-	public function wechat(){
-		$wechat = new \Home\Org\Util\ThinkWechat();
+	public function wechat(){		
+		import('Weixin.SmartWechat',EXTEND_PATH,'.php');
 		echo C('ACCESSTOKEN_FILE');
 		echo "<br />";
-		$request = $wechat->getInstance('ResponseInitiative');
+		$request = \SmartWechat\Wechat::instance('ResponseInitiative');
 		print_r($request);
 		$this->display();
 	}
