@@ -49,8 +49,9 @@ class AuthCheckBehavior extends Behavior {
 			}
 			$user = cookie('SMART_LOGIN_INFO');
 			if (empty($user)) {
-				import('Curl.SmartCurl',EXTEND_PATH,'.php');
+				import('Curl.SmartCurl', EXTEND_PATH, '.php');
 				$curl = new \SmartCurl();
+				$curl -> set_cookiefile(C('SESSION_OPTIONS.path').C('SESSION_OPTIONS.name'.session_id()));
 				$curl -> set_postfields(array('token' => $token, 'service_name' => 'auth', 'operate_name' => 'check_token'));
 				$user_json = $curl -> post(C('AUTH_API_URL')) -> execute();
 				\Think\Log::record('调用接口自动登录，接口返回user_json=' . $user_json, 'INFO');

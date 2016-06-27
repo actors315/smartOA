@@ -72,7 +72,7 @@ class Auth extends MY_Service {
 		
 		return $this->_return($auth_info);
 	}
-	
+		
 	private function _return($user){
 		unset($user['id']);
 		unset($user['password']);

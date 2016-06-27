@@ -22,7 +22,8 @@ $config = array(
 		'SHOW_PAGE_TRACE' =>FALSE,
 	),
 	'LINGYIN' => array(
-		'SESSION_OPTIONS'	=> array('name'=>'smart_session','expire'=>7200,'domain'=>'.lingyin99.cn'),
+		'SESSION_TYPE'	=>	'File',
+		'SESSION_OPTIONS'	=> array('name'=>'smart_session','expire'=>7200,'domain'=>'.lingyin99.cn','path'=>'/var/lib/php7/session/'),
 		'COOKIE_DOMAIN'		=> '.lingyin99.cn',
 	),
 );

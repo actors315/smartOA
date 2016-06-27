@@ -1,5 +1,5 @@
 require.config({
-	baseUrl : '/Public/Static/js/',
+	baseUrl : 'https://static.lingyin99.cn/Static/js/',
 	paths : {
 		smartOA : "lib/smartOA",
 		jquery : "lib/jquery/jquery.2.1.1.min",
@@ -7,6 +7,7 @@ require.config({
 		toastr : "plugins/toastr/toastr.min",
 		bootbox : 'plugins/bootbox/bootbox.min',
 		ui_dialog : "plugins/ui_dialog",
+		socketio : "lib/socket.io-client/socket.io",
 		a : "test/a",
 	},
 	map : {
@@ -30,3 +31,24 @@ require.config({
 		}
 	}
 });
+
+require(['socketio', 'smartOA'], function(io, smart) {
+	var uid = smart.cookie.get('token');
+	if(uid == undefined){
+		return;
+	}
+	
+	var socket = io('http://' + document.domain + ':2120');	
+	// 当socket连接后发送登录请求
+	socket.on('connect', function() {
+		socket.emit('login', uid);
+	});
+	// 当服务端推送来消息时触发，这里简单的aler出来，用户可做成自己的展示效果
+	socket.on('new_msg', function(msg) {
+		console.log(msg);
+	});
+	//在线人数
+	socket.on('update_online_count', function(msg) {
+		console.log(msg);
+	});
+}); 

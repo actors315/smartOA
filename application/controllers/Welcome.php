@@ -25,7 +25,7 @@ class Welcome extends CI_Controller {
     }
 
     public function test() {
-        exit(json_encode(array('name' => 'xiehuanjin', 'age' => 25, 'sex' => 'male')));
+        exit(session_id());
     }
 
 }

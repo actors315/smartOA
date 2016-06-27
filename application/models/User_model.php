@@ -75,6 +75,7 @@ class User_model extends Base_model {
 		$sessiondata['last_activity'] = time();
 		$sessiondata['ip_address'] = $this -> input -> ip_address();
 		$sessiondata['user_agent'] = $this -> input -> user_agent();
+		$sessiondata['session_id'] = session_id();
 		$this -> session -> set_userdata($sessiondata);
 
 		//更新到缓存
@@ -88,8 +89,9 @@ class User_model extends Base_model {
 		$data['last_activity'] = $this -> session -> userdata('last_activity');
 		$data['lastdate'] = $this -> session -> userdata('lastdate');
 		$data['lastguid'] = $this -> session -> userdata('lastguid');
+		$data['session_id'] = $this -> session -> userdata('session_id');
 		$data['invalidate'] = $this -> session -> userdata('invalidate');
-		$this -> db -> set($data) -> where(array('userid' => $user['id'])) -> replace('user_access_token');
+		$this -> db -> set($data) -> where(array('access_token' => $data['access_token'])) -> replace('user_access_token');
 
 		return $sessiondata['access_token'];
 	}

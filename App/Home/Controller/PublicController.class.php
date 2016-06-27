@@ -5,7 +5,7 @@ use Think\Controller;
 
 class PublicController extends Controller {
 	protected $config = array('app_type' => 'public');
-	
+
 	public function login() {
 
 		$this -> assign('is_verify_code', get_system_config("IS_VERIFY_CODE"));
@@ -63,15 +63,10 @@ class PublicController extends Controller {
 	}
 
 	public function logout() {
-		$auth_id = session(C('USER_AUTH_KEY'));
-		if (isset($auth_id)) {
-			session(null);
-			$this -> assign("jumpUrl", __APP__);
-			$this -> success('退出成功！');
-		} else {
-			$this -> assign("jumpUrl", __APP__);
-			$this -> error('退出成功！');
-		}
+		session(null);
+		$data['status'] = 1;
+		$data['info'] = '退出成功！';
+		$this -> ajaxReturn($data,'jsonp');
 	}
 
 	public function register() {

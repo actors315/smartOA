@@ -60,3 +60,5 @@ App/Common/Conf/db.php
 App/Common/Conf/weixin.php
 application/config/weixin.php
 application/config/database.php
+SmartExtend/Pay/pingpp-php/
+SmartExtend/MsgSender/web-msg-sender/

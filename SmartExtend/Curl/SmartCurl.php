@@ -4,267 +4,267 @@
  */
 class SmartCurl {
 
-    /**
-     * 请求参数
-     */
-    private $options = array(CURLOPT_SSL_VERIFYPEER => 0, CURLOPT_RETURNTRANSFER => 1, CURLOPT_CONNECTTIMEOUT => 30, CURLOPT_TIMEOUT => 60, CURLOPT_RETURNTRANSFER => 1, CURLOPT_HEADER => 0, CURLOPT_NOSIGNAL => 1, CURLOPT_FOLLOWLOCATION => 1, CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36", );
+	/**
+	 * 请求参数
+	 */
+	private $options = array(CURLOPT_SSL_VERIFYPEER => 0, CURLOPT_RETURNTRANSFER => 1, CURLOPT_CONNECTTIMEOUT => 30, CURLOPT_TIMEOUT => 60, CURLOPT_RETURNTRANSFER => 1, CURLOPT_HEADER => 0, CURLOPT_NOSIGNAL => 1, CURLOPT_FOLLOWLOCATION => 1, CURLOPT_USERAGENT => "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36", );
 
-    /**
-     * @var array
-     */
-    private $headers = array();
+	/**
+	 * @var array
+	 */
+	private $headers = array();
 
-    /**
-     * 当前请求方法
-     */
-    private $method;
-    
-    /**
-     * 前会话最近一次错误的字符串
-     */
-    private $error;
+	/**
+	 * 当前请求方法
+	 */
+	private $method;
 
-    /**
-     * 最后一次传输的相关信息
-     */
-    private $info;
+	/**
+	 * 前会话最近一次错误的字符串
+	 */
+	private $error;
 
-    /**
-     * 当前请求
-     */
-    protected $request;
+	/**
+	 * 最后一次传输的相关信息
+	 */
+	private $info;
 
-    /**
-     * 请求响应
-     */
-    protected $callback;
+	/**
+	 * 当前请求
+	 */
+	protected $request;
 
-    public function __construct($config = array()) {
-        if (isset($config['options'])) {
-            $this -> options = $config['options'] + $this -> options;
-        }
-        if (isset($config['headers'])) {
-            $this -> headers = $config['headers'] + $this -> headers;
-        }
-    }
+	/**
+	 * 请求响应
+	 */
+	protected $callback;
 
-    /**
-     * 设置options
-     * @param array $options
-     */
-    public function set_options($options) {
-        $this -> options = $options + $this -> options;
-    }
+	public function __construct($config = array()) {
+		if (isset($config['options'])) {
+			$this -> options = $config['options'] + $this -> options;
+		}
+		if (isset($config['headers'])) {
+			$this -> headers = $config['headers'] + $this -> headers;
+		}
+	}
 
-    /**
-     * set timeout
-     *
-     * @param init $timeout
-     * @return
-     */
-    public function set_timeout($timeout) {
-        $this -> options[CURLOPT_TIMEOUT] = $timeout;
-    }
+	/**
+	 * 设置options
+	 * @param array $options
+	 */
+	public function set_options($options) {
+		$this -> options = $options + $this -> options;
+	}
 
-    /**
-     * set proxy
-     *
-     */
-    public function set_proxy($proxy) {
-        $this -> options[CURLOPT_PROXY] = $proxy;
-    }
+	/**
+	 * set timeout
+	 *
+	 * @param init $timeout
+	 * @return
+	 */
+	public function set_timeout($timeout) {
+		$this -> options[CURLOPT_TIMEOUT] = $timeout;
+	}
 
-    /**
-     * set referer
-     *
-     */
-    public function set_referer($referer) {
-        $this -> options[CURLOPT_REFERER] = $referer;
-    }
+	/**
+	 * set proxy
+	 *
+	 */
+	public function set_proxy($proxy) {
+		$this -> options[CURLOPT_PROXY] = $proxy;
+	}
 
-    /**
-     * 设置 user_agent
-     *
-     * @param string $useragent
-     * @return void
-     */
-    public function set_useragent($useragent) {
-        $this -> options[CURLOPT_USERAGENT] = $useragent;
-    }
+	/**
+	 * set referer
+	 *
+	 */
+	public function set_referer($referer) {
+		$this -> options[CURLOPT_REFERER] = $referer;
+	}
 
-    /**
-     * 设置COOKIE
-     *
-     * @param string $cookie
-     * @return void
-     */
-    public function set_cookie($cookie) {
-        $this -> options[CURLOPT_COOKIE] = $cookie;
-    }
+	/**
+	 * 设置 user_agent
+	 *
+	 * @param string $useragent
+	 * @return void
+	 */
+	public function set_useragent($useragent) {
+		$this -> options[CURLOPT_USERAGENT] = $useragent;
+	}
 
-    /**
-     * 设置COOKIE FILE
-     *
-     * @param string $cookie_file
-     * @return void
-     */
-    public function set_cookiefile($cookiefile) {
-        $this -> options[CURLOPT_COOKIEFILE] = $cookiefile;
-        //在访问其他页面时拿着这个cookie文件去访问
-        $this -> options[CURLOPT_COOKIEJAR] = $cookiefile;
-        //连接时把获得的cookie存为文件
-    }
+	/**
+	 * 设置COOKIE
+	 *
+	 * @param string $cookie
+	 * @return void
+	 */
+	public function set_cookie($cookie) {
+		$this -> options[CURLOPT_COOKIE] = $cookie;
+	}
 
-    /**
-     * 设置Gzip
-     *
-     * @param bool $gzip
-     * @return void
-     */
-    public function set_gzip($gzip) {
-        if ($gzip) {
-            $this -> options[CURLOPT_ENCODING] = 'gzip';
-        }
-    }
+	/**
+	 * 设置COOKIE FILE
+	 *
+	 * @param string $cookie_file
+	 * @return void
+	 */
+	public function set_cookiefile($cookiefile) {
+		//在访问其他页面时拿着这个cookie文件去访问
+		$this -> options[CURLOPT_COOKIEFILE] = $cookiefile;
+		//连接时把获得的cookie存为文件
+		$this -> options[CURLOPT_COOKIEJAR] = $cookiefile;
+	}
 
-    /**
-     * 设置post参数
-     * $param mixed $vars
-     */
-    public function set_postfields($vars) {
-        if (!empty($vars)) {
-            $vars = (is_string($vars)) ? $vars : http_build_query($vars, '', '&');
-            $this -> options[CURLOPT_POSTFIELDS] = $vars;
-        }
-    }
+	/**
+	 * 设置Gzip
+	 *
+	 * @param bool $gzip
+	 * @return void
+	 */
+	public function set_gzip($gzip) {
+		if ($gzip) {
+			$this -> options[CURLOPT_ENCODING] = 'gzip';
+		}
+	}
 
-    /**
-     * 设置Headers
-     *
-     * @param string $headers
-     * @return void
-     */
-    public function set_headers($headers) {
-        $this -> headers = $headers + $this -> headers;
-    }
+	/**
+	 * 设置post参数
+	 * $param mixed $vars
+	 */
+	public function set_postfields($vars) {
+		if (!empty($vars)) {
+			$vars = (is_string($vars)) ? $vars : http_build_query($vars, '', '&');
+			$this -> options[CURLOPT_POSTFIELDS] = $vars;
+		}
+	}
 
-    /**
-     * 设置IP
-     *
-     * @param string $ip
-     * @return void
-     */
-    public function set_ip($ip) {
-        $headers = array('CLIENT-IP' => $ip, 'X-FORWARDED-FOR' => $ip, );
-        $this -> headers = $headers + $this -> headers;
-    }
+	/**
+	 * 设置Headers
+	 *
+	 * @param string $headers
+	 * @return void
+	 */
+	public function set_headers($headers) {
+		$this -> headers = $headers + $this -> headers;
+	}
 
-    /**
-     * 设置Hosts
-     *
-     * @param string $hosts
-     * @return void
-     */
-    public function set_hosts($hosts) {
-        $headers = array('Host' => $hosts, );
-        $this -> headers = $headers + $this -> headers;
-    }
+	/**
+	 * 设置IP
+	 *
+	 * @param string $ip
+	 * @return void
+	 */
+	public function set_ip($ip) {
+		$headers = array('CLIENT-IP' => $ip, 'X-FORWARDED-FOR' => $ip, );
+		$this -> headers = $headers + $this -> headers;
+	}
 
-    /**
-     * 回调函数
-     */
-    public function set_callback($callback) {
-        if (is_callable($callback)) {
-            $this -> callback = $callback;
-        }
-    }
+	/**
+	 * 设置Hosts
+	 *
+	 * @param string $hosts
+	 * @return void
+	 */
+	public function set_hosts($hosts) {
+		$headers = array('Host' => $hosts, );
+		$this -> headers = $headers + $this -> headers;
+	}
 
-    public function request($method, $url, $vars = array()) {
+	/**
+	 * 回调函数
+	 */
+	public function set_callback($callback) {
+		if (is_callable($callback)) {
+			$this -> callback = $callback;
+		}
+	}
 
-        $this -> options[CURLOPT_URL] = $url;
+	public function request($method, $url, $vars = array()) {
 
-        $this -> request = curl_init();
+		$this -> options[CURLOPT_URL] = $url;
 
-        $this -> set_postfields($vars);
-        $this -> set_request_method($method);
-        $this -> set_request_headers();
-        $this -> set_request_options();
+		$this -> request = curl_init();
 
-        $curl = clone $this;
-        return $curl;
-    }
+		$this -> set_postfields($vars);
+		$this -> set_request_method($method);
+		$this -> set_request_headers();
+		$this -> set_request_options();
 
-    public function execute() {
-        $output = curl_exec($this -> request);
-        $this -> info = curl_getinfo($this -> request);
-        if ($output === false) {
-            $this -> error = curl_error($this -> request);
-        }
-        if ($this -> callback) {
-            call_user_func($this -> callback, $output, $this -> info, $this -> request, $this -> error);
-        }
-        curl_close($this -> request);
-        return $output;
-    }
+		$curl = clone $this;
+		return $curl;
+	}
 
-    public function delete($url, $vars = array()) {
-        return $this -> request('DELETE', $url, $vars);
-    }
+	public function execute() {
+		$output = curl_exec($this -> request);
+		$this -> info = curl_getinfo($this -> request);
+		if ($output === false) {
+			$this -> error = curl_error($this -> request);
+		}
+		if ($this -> callback) {
+			call_user_func($this -> callback, $output, $this -> info, $this -> request, $this -> error);
+		}
+		curl_close($this -> request);
+		return $output;
+	}
 
-    public function head($url, $vars = array()) {
-        return $this -> request('HEAD', $url, $vars);
-    }
+	public function delete($url, $vars = array()) {
+		return $this -> request('DELETE', $url, $vars);
+	}
 
-    public function put($url, $vars = array()) {
-        return $this -> request('PUT', $url, $vars);
-    }
+	public function head($url, $vars = array()) {
+		return $this -> request('HEAD', $url, $vars);
+	}
 
-    public function post($url, $vars = array()) {
-        return $this -> request('POST', $url, $vars);
-    }
+	public function put($url, $vars = array()) {
+		return $this -> request('PUT', $url, $vars);
+	}
 
-    public function get($url, $vars = array()) {
-        if (!empty($vars)) {
-            $url .= (stripos($url, '?') !== false) ? '&' : '?';
-            $url .= (is_string($vars)) ? $vars : http_build_query($vars, '', '&');
-        }
-        return $this -> request('GET', $url);
-    }
+	public function post($url, $vars = array()) {
+		return $this -> request('POST', $url, $vars);
+	}
 
-    private function set_request_method($method) {
-        switch (strtoupper($method)) {
-            case 'HEAD' :
-                curl_setopt($this -> request, CURLOPT_NOBODY, true);
-                break;
-            case 'GET' :
-                curl_setopt($this -> request, CURLOPT_HTTPGET, true);
-                break;
-            case 'POST' :
-                curl_setopt($this -> request, CURLOPT_POST, true);
-                break;
-            default :
-                curl_setopt($this -> request, CURLOPT_CUSTOMREQUEST, $method);
-        }
-        $this -> method = strtoupper($method);
-    }
+	public function get($url, $vars = array()) {
+		if (!empty($vars)) {
+			$url .= (stripos($url, '?') !== false) ? '&' : '?';
+			$url .= (is_string($vars)) ? $vars : http_build_query($vars, '', '&');
+		}
+		return $this -> request('GET', $url);
+	}
 
-    private function set_request_headers() {
-        $headers = array();
-        foreach ($this->headers as $key => $value) {
-            $headers[] = $key . ': ' . $value;
-        }
-        curl_setopt($this -> request, CURLOPT_HTTPHEADER, $headers);
-    }
+	private function set_request_method($method) {
+		switch (strtoupper($method)) {
+			case 'HEAD' :
+				curl_setopt($this -> request, CURLOPT_NOBODY, true);
+				break;
+			case 'GET' :
+				curl_setopt($this -> request, CURLOPT_HTTPGET, true);
+				break;
+			case 'POST' :
+				curl_setopt($this -> request, CURLOPT_POST, true);
+				break;
+			default :
+				curl_setopt($this -> request, CURLOPT_CUSTOMREQUEST, $method);
+		}
+		$this -> method = strtoupper($method);
+	}
 
-    private function set_request_options() {
-        foreach ($this->options as $key => $value) {
-            curl_setopt($this -> request, $key, $value);
-        }
-    }
+	private function set_request_headers() {
+		$headers = array();
+		foreach ($this->headers as $key => $value) {
+			$headers[] = $key . ': ' . $value;
+		}
+		curl_setopt($this -> request, CURLOPT_HTTPHEADER, $headers);
+	}
 
-    public function __toString() {
-        return 'method:' . $this -> method . ';' . implode(';', $this -> options) . ';' . implode(';', $this -> headers);
-    }
+	private function set_request_options() {
+		foreach ($this->options as $key => $value) {
+			curl_setopt($this -> request, $key, $value);
+		}
+	}
+
+	public function __toString() {
+		return 'method:' . $this -> method . ';' . implode(';', $this -> options) . ';' . implode(';', $this -> headers);
+	}
 
 }
 

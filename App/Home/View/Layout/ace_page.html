@@ -218,7 +218,7 @@
 						</li>
 
 						<li class="light-blue">
-							<a data-toggle="dropdown" href="#" class="dropdown-toggle"> <img class="nav-user-photo" src="{:session('user_pic')}" onerror="javascript:this.src='/Uploads/emp_pic/no_avatar.jpg'" alt="{:session('user_name')}" /> <span class="user-info"> <small>欢迎您,</small> {:session('user_name')} </span> <i class="ace-icon fa fa-caret-down"></i> </a>
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle"> <img class="nav-user-photo" src="{:session('user_pic')}" onerror="javascript:this.src='/Public/Uploads/emp_pic/no_avatar.jpg'" alt="{:session('user_name')}" /> <span class="user-info"> <small>欢迎您,</small> {:session('user_name')} </span> <i class="ace-icon fa fa-caret-down"></i> </a>
 
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
@@ -324,7 +324,6 @@
 								<b class="arrow"></b>
 							</li>
 
-							
 						</ul>
 					</li>
 
@@ -800,10 +799,15 @@
 		<script src="__STATIC__/js/require.js" data-main="__STATIC__/js/main"></script>
 		<script type="text/javascript">
 			function logout() {
-				require(['smartOA'], function(smart) {
-					smart.cookie.clear('token', '.lingyin99.cn', '/');
-					smart.cookie.clear('SMART_LOGIN_INFO', '.lingyin99.cn', '/');
-					location.href = "{:U('Index/index')}";
+				require(['smartOA', 'common'], function(smart, c) {
+					c.send_ajax("{:U('Public/logout')}", '', function(res) {
+						if (res.status) {
+							smart.cookie.clear('token', '.lingyin99.cn', '/');
+							smart.cookie.clear('SMART_LOGIN_INFO', '.lingyin99.cn', '/');
+							location.href = "{:U('Index/index')}";
+						}
+					});
+
 				});
 			}
 		</script>
